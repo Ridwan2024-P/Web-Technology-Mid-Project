@@ -79,14 +79,7 @@ async createAnnouncement(dto: CreateAnnouncementDto): Promise<Announcement> {
   return this.announcementRepo.find();
  }
 
- async login(loginDto: LoginDto) {
-  const { email, password } = loginDto;
-  const admin = await this.adminRepo.findOneBy({ email, password });
-  if (!admin) {
-    throw new NotFoundException('Invalid email or password');
-  }
- return  { message: 'Login successful' };
-}
+
     
   
 }

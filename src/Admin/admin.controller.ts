@@ -6,10 +6,10 @@ import { CreateAnnouncementDto } from "./announcement.dto";
 import { Announcement } from "./announcement.entity";
 import { LoginDto } from "./Login.dto";
 import { JwtAuthGuard } from "src/auth/jwt.guard";
-
+@UseGuards(JwtAuthGuard) 
 @Controller('admin')
 export class AdminController {
-  @UseGuards(JwtAuthGuard) 
+  
   @Get('profile')
   getProfile(@Req() req) {
     return { message: 'Protected admin profile', user: req.user };
@@ -56,9 +56,6 @@ export class AdminController {
     return this.adminService.getAllAnnouncements();
   }
 
-  @Get('login')
-  login(@Body() loginDto: LoginDto) {
-    return this.adminService.login(loginDto);
-  }
+ 
 
 }
