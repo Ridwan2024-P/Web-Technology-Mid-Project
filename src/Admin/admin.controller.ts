@@ -4,6 +4,7 @@ import { AdminDto } from "./admin.dto";
 import { ManagerDto } from "./manager.dto";
 import { CreateAnnouncementDto } from "./announcement.dto";
 import { Announcement } from "./announcement.entity";
+import { LoginDto } from "./Login.dto";
 
 @Controller('admin')
 export class AdminController {
@@ -47,6 +48,11 @@ export class AdminController {
   @Get('announcements')
   async getAllAnnouncements(): Promise<Announcement[]> {
     return this.adminService.getAllAnnouncements();
+  }
+
+  @Get('login')
+  login(@Body() loginDto: LoginDto) {
+    return this.adminService.login(loginDto);
   }
 
 }

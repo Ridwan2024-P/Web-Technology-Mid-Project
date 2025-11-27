@@ -7,6 +7,8 @@ import { InjectRepository } from '@nestjs/typeorm';
 import { Manager } from "./manager.entity";
 import { Announcement } from "./announcement.entity";
 import { CreateAnnouncementDto } from "./announcement.dto";
+import { LoginDto } from "./Login.dto";
+import { MESSAGES } from "@nestjs/core/constants";
 
 
 @Injectable()
@@ -77,5 +79,14 @@ async createAnnouncement(dto: CreateAnnouncementDto): Promise<Announcement> {
   return this.announcementRepo.find();
  }
 
-
+ async login(loginDto: LoginDto) {
+  const { email, password } = loginDto;
+  const admin = await this.adminRepo.findOneBy({ email, password });
+  if (!admin) {
+    throw new NotFoundException('Invalid email or password');
+  }
+ return  { message: 'Login successful' };
+}
+    
+  
 }
