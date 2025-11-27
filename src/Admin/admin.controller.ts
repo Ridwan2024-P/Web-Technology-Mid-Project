@@ -1,13 +1,19 @@
-import { Controller, Post, Body,  Get, Put,Param, Patch,Delete} from "@nestjs/common";
+import { Controller, Post, Body,  Get, Put,Param, Patch,Delete,UseGuards,Req} from "@nestjs/common";
 import { AdminService } from "./admin.service";
 import { AdminDto } from "./admin.dto";
 import { ManagerDto } from "./manager.dto";
 import { CreateAnnouncementDto } from "./announcement.dto";
 import { Announcement } from "./announcement.entity";
 import { LoginDto } from "./Login.dto";
+import { JwtAuthGuard } from "src/auth/jwt.guard";
 
 @Controller('admin')
 export class AdminController {
+  @UseGuards(JwtAuthGuard) 
+  @Get('profile')
+  getProfile(@Req() req) {
+    return { message: 'Protected admin profile', user: req.user };
+  }
   constructor(private readonly adminService: AdminService) {}
 
   @Post()
