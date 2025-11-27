@@ -9,6 +9,7 @@ import { Announcement } from "./announcement.entity";
 import { CreateAnnouncementDto } from "./announcement.dto";
 import { LoginDto } from "./Login.dto";
 import { MESSAGES } from "@nestjs/core/constants";
+import * as bcrypt from 'bcrypt';
 
 
 @Injectable()
@@ -21,7 +22,15 @@ export class AdminService {
   @InjectRepository(Announcement)private announcementRepo: Repository<Announcement>){}
 
     async createAdmin(adminDto: AdminDto): Promise<Admin> {
-        const admin = this.adminRepo.create(adminDto);
+      const adminExists = await this.adminRepo.findOneBy({ email: adminDto.email });
+      if (adminExists) {
+        throw new NotFoundException('Admin with this email already exists');
+      }
+       const hashedPassword = await bcrypt.hash(adminDto.password, 10);
+        const admin = this.adminRepo.create({
+          ...adminDto,
+          password: hashedPassword,
+        });
         return this.adminRepo.save(admin);
     }
 

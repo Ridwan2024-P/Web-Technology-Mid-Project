@@ -13,16 +13,16 @@ export class AuthService {
   ) {}
 
   async validateUser(email: string, pass: string): Promise<Omit<Admin, 'password'> | null> {
-    const user = await this.adminRepository.findOne({ where: { email } });
-    if (user && user.password === pass) {
-      const { password, ...result } = user;
+    const admin = await this.adminRepository.findOne({ where: { email } });
+    if (admin && admin.password === pass) {
+      const { password, ...result } = admin     ;
       return result;
     }
     return null;
   }
 
-  async login(user: Admin) {
-    const payload = { email: user.email, sub: user.id };
+  async login(admin: Admin) {
+    const payload = { email: admin.email, sub: admin.id };
     return {
       access_token: this.jwtService.sign(payload),
     };
