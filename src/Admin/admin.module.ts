@@ -6,10 +6,12 @@ import { Admin } from './admin.entity';
 import { Manager } from './manager.entity';
 import { Announcement } from './announcement.entity';
 import { AuthModule } from 'src/auth/auth.module';
+import { EmailService } from 'src/email/email.service';
+import { EmailModule } from 'src/email/email.module';
 
 
 @Module({
-  imports: [TypeOrmModule.forFeature([Admin,Manager,Announcement]),AuthModule],
+  imports: [TypeOrmModule.forFeature([Admin,Manager,Announcement]),AuthModule,EmailModule],
   controllers: [AdminController],
   providers: [AdminService],
 })

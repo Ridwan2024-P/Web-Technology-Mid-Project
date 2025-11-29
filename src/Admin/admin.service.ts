@@ -10,6 +10,7 @@ import { CreateAnnouncementDto } from "./announcement.dto";
 import { LoginDto } from "./Login.dto";
 import { MESSAGES } from "@nestjs/core/constants";
 import * as bcrypt from 'bcrypt';
+import { EmailService } from "src/email/email.service";
 
 
 @Injectable()
@@ -19,7 +20,9 @@ export class AdminService {
 
   @InjectRepository(Manager)private readonly managerRepo: Repository<Manager>,
   
-  @InjectRepository(Announcement)private announcementRepo: Repository<Announcement>){}
+  @InjectRepository(Announcement)private announcementRepo: Repository<Announcement>,
+  private readonly emailService: EmailService,
+){}
 
     async createAdmin(adminDto: AdminDto): Promise<Admin> {
       const adminExists = await this.adminRepo.findOneBy({ email: adminDto.email });
@@ -81,9 +84,25 @@ export class AdminService {
 }
 
 async createAnnouncement(dto: CreateAnnouncementDto): Promise<Announcement> {
+   
     const announcement = this.announcementRepo.create(dto);
-    return this.announcementRepo.save(announcement);
-  }
+    const saved = await this.announcementRepo.save(announcement);
+
+
+    const managers = await this.managerRepo.find(); 
+    const emails = managers.map(m => m.email).join(','); 
+
+   
+    await this.emailService.sendEmail({
+        recipients: emails,
+        subject: `New Announcement: ${dto.title}`,
+        html: `<p>${dto.message}</p>`
+    });
+
+    return saved;
+}
+
+
  async getAllAnnouncements(): Promise<Announcement[]> {
   return this.announcementRepo.find();
  }

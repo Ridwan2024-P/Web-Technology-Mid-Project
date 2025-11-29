@@ -4,8 +4,12 @@ import { TypeOrmModule } from '@nestjs/typeorm';
 import { AuthModule } from './auth/auth.module';
 
 
+import { ConfigModule } from '@nestjs/config';
+import { EmailModule } from './email/email.module';
+
+
 @Module({
-  imports: [AdminModule,AuthModule,TypeOrmModule.forRoot({
+  imports: [AdminModule,AuthModule,EmailModule,ConfigModule.forRoot(),TypeOrmModule.forRoot({
     type: 'postgres',
     host: 'localhost',
     port: 5432,

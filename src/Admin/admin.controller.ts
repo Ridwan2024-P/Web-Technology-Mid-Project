@@ -6,7 +6,7 @@ import { CreateAnnouncementDto } from "./announcement.dto";
 import { Announcement } from "./announcement.entity";
 import { LoginDto } from "./Login.dto";
 import { JwtAuthGuard } from "src/auth/jwt.guard";
-@UseGuards(JwtAuthGuard) 
+
 @Controller('admin')
 export class AdminController {
   
